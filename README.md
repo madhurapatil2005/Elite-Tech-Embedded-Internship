@@ -20,3 +20,6 @@
 ​When you press the button, the logic detects the change.
 ​The "Debounce" delay runs to filter out mechanical vibration.
 ​The screen displays: Counter: 1, Counter: 2, and so on.
+
+
+
