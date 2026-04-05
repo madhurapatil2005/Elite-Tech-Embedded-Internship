@@ -21,5 +21,21 @@
 ​The "Debounce" delay runs to filter out mechanical vibration.
 ​The screen displays: Counter: 1, Counter: 2, and so on.
 
-
+​# Task 2: Home Automation System via Bluetooth (AVR C)
+​### Project Overview
+​This project implements a wireless Home Automation system using the ATmega328P microcontroller. The system allows for remote control of electrical appliances (represented by an LED) using a smartphone application and an HC-05 Bluetooth Module.
+​Unlike standard Arduino libraries, this project uses Register-Level Programming (AVR C) to manage UART communication and GPIO, ensuring high performance and efficient memory usage.
+​### Technical Working Logic
+​The system operates on Asynchronous Serial Communication:
+​Baud Rate Configuration: The system is set to 9600 bps by calculating the UBRR0 (USART Baud Rate Register) based on a 16MHz CPU frequency.
+​Wireless Reception: The smartphone app sends ASCII characters ('1' or '0') via Bluetooth to the HC-05 module.
+​UART Reception: The UART_receive() function polls the RXC0 (USART Receive Complete) flag. Once data is available, it is read from the UDR0 register.
+​Hardware Action:
+​Receiving '1': The bit PB5 in the PORTB register is set high, turning the LED ON.
+​Receiving '0': The bit PB5 in the PORTB register is cleared, turning the LED OFF.
+### Hardware & Software Requirements
+​Microcontroller: Arduino Uno (ATmega328P).
+​Communication: HC-05 Bluetooth Module.
+​Programming Language: AVR C (Embedded C).
+​Compiler: AVR-GCC / Tinkercad Simulator.
 
