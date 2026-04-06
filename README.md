@@ -21,7 +21,10 @@
 ​The "Debounce" delay runs to filter out mechanical vibration.
 ​The screen displays: Counter: 1, Counter: 2, and so on.
 
-​# Task 2: Home Automation System via Bluetooth (AVR C)
+​
+
+
+## Task 2: Home Automation System via Bluetooth (AVR C)
 ​### Project Overview
 ​This project implements a wireless Home Automation system using the ATmega328P microcontroller. The system allows for remote control of electrical appliances (represented by an LED) using a smartphone application and an HC-05 Bluetooth Module.
 ​Unlike standard Arduino libraries, this project uses Register-Level Programming (AVR C) to manage UART communication and GPIO, ensuring high performance and efficient memory usage.
@@ -38,4 +41,6 @@
 ​Communication: HC-05 Bluetooth Module.
 ​Programming Language: AVR C (Embedded C).
 ​Compiler: AVR-GCC / Tinkercad Simulator.
+
+
 
