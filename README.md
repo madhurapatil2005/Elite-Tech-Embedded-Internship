@@ -46,4 +46,35 @@
 
 
 
+## Task 3: Temperature Monitoring System (AVR C)
+​### Project Overview
+​This project involves designing an embedded system to measure and display real-time ambient temperature. Using an ATmega328P (Arduino Uno), the system interfaces with a TMP36 Analog Temperature Sensor.
+​The project is implemented using AVR Register-Level Programming, specifically utilizing the Analog-to-Digital Converter (ADC) and USART (UART) modules to process sensor data and transmit it to a Serial Monitor without the use of high-level Arduino libraries.
+​### Technical Working Logic
+​The system follows a three-step process: Sensing, Conversion, and Transmission.
+​Analog Sensing: The TMP36 sensor outputs a voltage linearly proportional to the Celsius temperature.
+​ADC Configuration: * The ADMUX register is configured to use AVcc (5V) as the reference voltage.
+​The ADCSRA register is used to enable the ADC and set a prescaler of 128 (converting the 16MHz clock to a stable 125kHz for sampling).
+​Data is read from the A0 (ADC0) pin.
+​Data Processing: * The 10-bit digital value (0 to 1023) is converted back to voltage.
+​Formula: Celsius = \frac{ADC \times 5.0 \times 100.0}{1024.0}
+​The dtostrf() function is used to convert the float temperature value into a string for serial transmission.
+​UART Transmission: The processed string is sent to the Serial Monitor via the UDR0 register at a baud rate of 9600.
+
+Component      Sensor Pin      Arduino Pin      Register/Port
+TMP36 Sensor   Power (VCC)      5V                 VCC
+TMP36 Sensor   Ground (GND)     GND                GND
+TMP36 Sensor   Vout (Signal)    A0                 ADC0
+
+### Hardware & Software Requirements
+​Microcontroller: Arduino Uno (ATmega328P).
+​Sensor: TMP36 Precision Temperature Sensor.
+​Communication: USB-Serial (UART).
+​Programming: AVR C (Embedded C).
+​Simulation: Tinkercad.
+
+
+
+
+
 
