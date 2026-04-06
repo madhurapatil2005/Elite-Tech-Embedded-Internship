@@ -1,0 +1,69 @@
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+#include <stdlib.h> // Required for dtostrf
+
+#define BAUD 9600
+#define MYUBRR F_CPU/16/BAUD-1
+
+// --- UART Functions ---
+void UART_init(unsigned int ubrr) {
+    UBRR0H = (unsigned char)(ubrr>>8);
+    UBRR0L = (unsigned char)ubrr;
+    UCSR0B = (1<<TXEN0); // Enable Transmitter
+    UCSR0C = (3<<UCSZ00); // 8-bit data
+}
+
+void UART_print(char* s) {
+    while(*s) {
+        while (!(UCSR0A & (1<<UDRE0)));
+        UDR0 = *s++;
+    }
+}
+
+// --- ADC Functions ---
+void ADC_init() {
+    // REFS0: Use AVcc as reference voltage (5V)
+    ADMUX = (1 << REFS0);
+    // ADEN: Enable ADC, Set Prescaler to 128 (16MHz/128 = 125kHz)
+    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+}
+
+uint16_t ADC_read(uint8_t channel) {
+    ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);
+    ADCSRA |= (1 << ADSC); // Start Conversion
+    while (ADCSRA & (1 << ADSC)); // Wait for completion
+    return ADC; // Returns the 10-bit result
+}
+
+int main(void) {
+    UART_init(MYUBRR);
+    ADC_init();
+    
+    char temp_string[10];
+    char output_buffer[50];
+    uint16_t raw_val;
+    float celsius;
+
+    UART_print("Temperature Sensor Initialized...\r\n");
+
+    while (1) {
+        raw_val = ADC_read(0); // Read A0 pin
+        
+        // Calculation for LM35/TMP36:
+        // 1. Convert ADC (0-1023) to Voltage (0-5V)
+        // 2. LM35 gives 10mV per degree (1V = 100 degrees)
+        celsius = (raw_val * 5.0 * 100.0) / 1024.0;
+
+        // FIXED: Using dtostrf instead of sprintf for floats
+        // dtostrf(float_value, width, precision, buffer)
+        dtostrf(celsius, 4, 2, temp_string); 
+
+        // Combine into final message
+        UART_print("Temp: ");
+        UART_print(temp_string);
+        UART_print(" C\r\n");
+
+        _delay_ms(1000); // Update every 1 second
+    }
+}
