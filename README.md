@@ -75,6 +75,40 @@ TMP36 Sensor   Vout (Signal)    A0                 ADC0
 
 
 
+Task 4: Speech Recognition System (AVR C)
+​### Project Overview
+​This project completes the final requirement of the Elite Tech Intern program. It involves designing a Speech Recognition System that allows for hands-free control of hardware devices through vocal commands. The system utilizes an ATmega328P microcontroller programmed at the register level to interpret serial strings as specific action triggers.
+​### Technical Implementation
+​The system serves as the hardware execution layer for a voice-processing interface.
+​Interface Design: A header-based serial interface is used to receive processed speech data from an external recognition engine (e.g., a smartphone app or PC script).
+​Communication Protocol: * UART (Universal Asynchronous Receiver-Transmitter) is used for data exchange.
+​Baud Rate: 9600.
+​Data Format: 8-bit, 1 Stop Bit.
+​Command Processing:
+​The microcontroller polls the UCSR0A register for the RXC0 (Receive Complete) flag.
+​When the character 'A' (representing the voice command "Light ON") is received, the PB5 (Pin 13) bit is set high.
+​When the character 'B' (representing "Light OFF") is received, the PB5 bit is cleared.
+​### Circuit Architecture
+​The circuit was designed in Tinkercad with the following connections:
+Component Pin         Arduino Uno Pin        AVR Register
+Interface TX(Header)  Pin 0 (RX)             UDR0 (Receive)
+Interface RX(Header)  Pin 1 (TX)             UDR0 (Transmit)
+LED Anode(+)          Pin 13                 PORTB5
+LED Cathode(-)        GND                    Ground
+
+## How to Use
+​Power: Connect the Arduino Uno to a power source.
+​Initialization: The Serial Monitor will display: "Speech Recognition Ready. Send 'A' for ON, 'B' for OFF."
+​Command Execution:
+​Enter 'A' in the serial interface to simulate the voice trigger for ON.
+​Enter 'B' to simulate the voice trigger for OFF.
+​### Hardware & Software Used
+​Microcontroller: Arduino Uno (ATmega328P).
+​Programming Language: Embedded C (AVR Toolchain).
+​Simulation Tool: Tinkercad.
+​Key Registers Used: DDRB, PORTB, UBRR0, UCSR0B, UCSR0C.
+
+
 
 
 
