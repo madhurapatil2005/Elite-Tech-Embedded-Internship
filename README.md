@@ -75,8 +75,9 @@ TMP36 Sensor   Vout (Signal)    A0                 ADC0
 
 
 
-Task 4: Speech Recognition System (AVR C)
-​### Project Overview
+
+###Task 4: Speech Recognition System (AVR C)
+​## Project Overview
 ​This project completes the final requirement of the Elite Tech Intern program. It involves designing a Speech Recognition System that allows for hands-free control of hardware devices through vocal commands. The system utilizes an ATmega328P microcontroller programmed at the register level to interpret serial strings as specific action triggers.
 ​### Technical Implementation
 ​The system serves as the hardware execution layer for a voice-processing interface.
