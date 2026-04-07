@@ -1,0 +1,61 @@
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+
+#define BAUD 9600
+#define MYUBRR F_CPU/16/BAUD-1
+
+// --- UART Functions for Speech Data Reception ---
+void UART_init(unsigned int ubrr) {
+    // Set baud rate using UBRR registers
+    UBRR0H = (unsigned char)(ubrr>>8);
+    UBRR0L = (unsigned char)ubrr;
+    
+    // Enable Receiver (RXEN0) to get voice data from the header
+    // Enable Transmitter (TXEN0) to send status back to Serial Monitor
+    UCSR0B = (1<<RXEN0) | (1<<TXEN0); 
+    
+    // Set frame format: 8-bit data, 1 stop bit
+    UCSR0C = (3<<UCSZ00);              
+}
+
+unsigned char UART_receive(void) {
+    // Wait for the 'Receive Complete' flag in UCSR0A
+    while (!(UCSR0A & (1<<RXC0)));     
+    // Return data from the UDR0 buffer
+    return UDR0;
+}
+
+void UART_print(char* s) {
+    while(*s) {
+        while (!(UCSR0A & (1<<UDRE0)));
+        UDR0 = *s++;
+    }
+}
+
+int main(void) {
+    // Initialize communication using calculated baud rate
+    UART_init(MYUBRR);
+    
+    // Set PB5 (Digital Pin 13) as Output for the light/device
+    DDRB |= (1 << DDB5);
+    
+    UART_print("Speech Recognition Ready. Send 'A' for ON, 'B' for OFF.\r\n");
+
+    while (1) {
+        // Receive the command character from the Header interface
+        unsigned char cmd = UART_receive();
+        
+        // --- Command Logic ---
+        // 'A' represents the voice command "Light On"
+        if (cmd == 'A') {
+            PORTB |= (1 << PORTB5);  // Set bit 5 high (LED ON)
+            UART_print("Voice Command: LIGHT ON\r\n");
+        } 
+        // 'B' represents the voice command "Light Off"
+        else if (cmd == 'B') {
+            PORTB &= ~(1 << PORTB5); // Clear bit 5 (LED OFF)
+            UART_print("Voice Command: LIGHT OFF\r\n");
+        }
+    }
+}
